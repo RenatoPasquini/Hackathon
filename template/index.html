@@ -1,93 +1,139 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Organizador de Eventos Corporativos com IA e Gemini"
+    />
+    <meta name="keywords" content="eventos, IA, Gemini, organização" />
+    <meta name="author" content="Seu Nome" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>POC Organizador de Eventos IA</title>
-    <link rel="stylesheet" href="static/css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
     <div class="container">
-        <header>
-            <h1>Organizador de Eventos Corporativos IA</h1>
-            <p>Preencha os detalhes abaixo para obter sugestões de temas com IA.</p>
-        </header>
+      <header>
+        <h1>Organizador de Eventos Corporativos IA</h1>
+        <p>Preencha os detalhes abaixo para obter sugestões de temas com IA.</p>
+      </header>
 
-        <main>
-            <form id="eventWizardForm">
-                <fieldset>
-                    <legend>Informações Básicas do Evento</legend>
+      <main>
+        <form id="eventWizardForm">
+          <fieldset>
+            <legend>Informações Básicas do Evento</legend>
 
-                    <div class="form-group">
-                        <label for="eventName">Nome do Evento:</label>
-                        <input type="text" id="eventName" name="eventName" placeholder="Ex: Confraternização Anual XPTO" required>
-                    </div>
+            <div class="form-group">
+              <label for="eventName">Nome do Evento:</label>
+              <input
+                type="text"
+                id="eventName"
+                name="eventName"
+                placeholder="Ex: Confraternização Anual XPTO"
+                required
+              />
+            </div>
 
-                    <div class="form-group">
-                        <label for="eventType">Tipo de Evento:</label>
-                        <select id="eventType" name="eventType">
-                            <option value="Confraternização">Confraternização</option>
-                            <option value="Treinamento">Treinamento</option>
-                            <option value="Lançamento de Produto">Lançamento de Produto</option>
-                            <option value="Workshop">Workshop</option>
-                            <option value="Conferência">Conferência</option>
-                            <option value="Team Building">Team Building</option>
-                            <option value="Outro">Outro</option>
-                        </select>
-                    </div>
-                </fieldset>
+            <div class="form-group">
+              <label for="eventType">Tipo de Evento:</label>
+              <select id="eventType" name="eventType">
+                <option value="Confraternização">Confraternização</option>
+                <option value="Treinamento">Treinamento</option>
+                <option value="Lançamento de Produto">
+                  Lançamento de Produto
+                </option>
+                <option value="Workshop">Workshop</option>
+                <option value="Conferência">Conferência</option>
+                <option value="Team Building">Team Building</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+          </fieldset>
 
-                <fieldset>
-                    <legend>Detalhes Adicionais</legend>
-                    <div class="form-group">
-                        <label for="guestCount">Número Estimado de Pessoas:</label>
-                        <input type="number" id="guestCount" name="guestCount" min="1" placeholder="Ex: 50">
-                    </div>
+          <fieldset>
+            <legend>Detalhes Adicionais</legend>
+            <div class="form-group">
+              <label for="guestCount">Número Estimado de Pessoas:</label>
+              <input
+                type="number"
+                id="guestCount"
+                name="guestCount"
+                min="1"
+                placeholder="Ex: 50"
+              />
+            </div>
+            <div class="form-group">
+              <label for="budget">Orçamento Preliminar (opcional):</label>
+              <input
+                type="text"
+                id="budget"
+                name="budget"
+                placeholder="Ex: Até 5000 EUR"
+              />
+            </div>
+            <div class="form-group">
+              <label for="eventDate">Data Desejada (opcional):</label>
+              <input type="date" id="eventDate" name="eventDate" />
+            </div>
 
-                    <div class="form-group">
-                        <label for="budget">Orçamento Preliminar (opcional):</label>
-                        <input type="text" id="budget" name="budget" placeholder="Ex: Até 5000 EUR">
-                    </div>
+            <div class="form-group">
+              <label for="eventObjective"
+                >Principal Objetivo/Mensagem do Evento:</label
+              >
+              <textarea
+                id="eventObjective"
+                name="eventObjective"
+                rows="3"
+                placeholder="Ex: Celebrar conquistas, promover integração, lançar novo produto..."
+              ></textarea>
+            </div>
 
-                    <div class="form-group">
-                        <label for="eventDate">Data Desejada (opcional):</label>
-                        <input type="date" id="eventDate" name="eventDate">
-                    </div>
+            <div class="form-group">
+              <label for="themeIdea"
+                >Alguma ideia inicial de Tema? (Opcional)</label
+              >
+              <input
+                type="text"
+                id="themeIdea"
+                name="themeIdea"
+                placeholder="Ex: Anos 80, Futurista, etc."
+              />
+            </div>
+          </fieldset>
 
-                    <div class="form-group">
-                        <label for="eventObjective">Principal Objetivo/Mensagem do Evento:</label>
-                        <textarea id="eventObjective" name="eventObjective" rows="3" placeholder="Ex: Celebrar conquistas, promover integração, lançar novo produto..."></textarea>
-                    </div>
+          <div class="form-actions">
+            <button type="submit" id="submitButton">
+              Obter Sugestões de Temas
+            </button>
+          </div>
+        </form>
 
-                     <div class="form-group">
-                        <label for="themeIdea">Alguma ideia inicial de Tema? (Opcional)</label>
-                        <input type="text" id="themeIdea" name="themeIdea" placeholder="Ex: Anos 80, Futurista, etc.">
-                    </div>
-                </fieldset>
+        <section id="resultsSection">
+          <h2>Sugestões de Temas Geradas pela IA:</h2>
 
-                <div class="form-actions">
-                    <button type="submit" id="submitButton">Obter Sugestões de Temas</button>
-                </div>
-            </form>
+          <div id="loadingIndicator">
+            <p>A processar com o Gemini... Por favor, aguarde.</p>
+            <div class="spinner"></div>
+          </div>
 
-            <section id="resultsSection">
-                <h2>Sugestões de Temas Geradas pela IA:</h2>
-                <div id="loadingIndicator">
-                    <p>A processar com o Gemini... Por favor, aguarde.</p>
-                    <div class="spinner"></div>
-                </div>
-                
-                <div id="errorMessage" class="error-message">
-                </div>
-                <pre id="themeSuggestionsOutput" class="results-output"></pre>
-            </section>
-        </main>
+          <div id="errorMessage" class="error-message"></div>
+          <pre id="themeSuggestionsOutput" class="results-output"></pre>
+        </section>
+      </main>
 
-        <footer>
-            <p>POC - Organizador de Eventos com IA & Gemini</p>
-        </footer>
+      <footer>
+        <p>POC - Organizador de Eventos com IA & Gemini</p>
+      </footer>
     </div>
-
-    <script src="static/js/script.js"></script>
-</body>
-</html> 
+    <script src="static/js/script.js" defer></script>
+  </body>
+</html>

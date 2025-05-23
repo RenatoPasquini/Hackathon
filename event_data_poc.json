@@ -27,6 +27,347 @@
             },
             "prompt_enviado_llm": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos.\nCom base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento.\nPara cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito.\n\nDetalhes do Evento:\n- Nome do Evento: Brasil\n- Tipo de Evento: Team Building\n- Número Estimado de Pessoas: 25\n- Orçamento Preliminar: 1000\n- Data Desejada: \n- Principal Objetivo/Mensagem: \n\nPor favor, formate a sua resposta claramente, listando cada tema e sua descrição.\nExemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]\n",
             "sugestoes_temas_llm": "Perfeito! Com base nas informações fornecidas, aqui estão 3 temas distintos para o evento de Team Building \"Brasil\", considerando o orçamento e o número de participantes:\n\n**Tema 1: Brasil Criativo: Cores e Sabores Nacionais**\n\nDescrição: Uma imersão nas cores vibrantes da cultura brasileira e nos sabores únicos da nossa culinária, estimulando a criatividade e o trabalho em equipe através de atividades artísticas e gastronômicas.\n\n**Tema 2: Expedição Brasil: Desvendando Tesouros Escondidos**\n\nDescrição: Uma jornada lúdica por diferentes regiões do Brasil, desafiando os participantes a resolverem enigmas e cumprirem tarefas que representem a diversidade geográfica e cultural do país.\n\n**Tema 3: Conexão Brasil: Construindo Pontes entre Talentos**\n\nDescrição: Focado na colaboração e na sinergia, este tema propõe dinâmicas que conectam os participantes, explorando suas habilidades individuais para construir soluções inovadoras e fortalecer o espírito de equipe, inspirado na força do Brasil em unir diferentes talentos.\n"
+        },
+        {
+            "id_evento": "evt_3",
+            "detalhes_fornecidos": {
+                "eventName": "India",
+                "eventType": "Confraternização",
+                "guestCount": "20",
+                "budget": "1000",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: India\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: 20\n- Orçamento Preliminar: 1000\n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Com base nos detalhes fornecidos, aqui estão 3 temas distintos para o evento de confraternização \"India\", considerando o orçamento e o número de participantes:\n\n**Tema 1: Cores da Índia**\nDescrição: Uma celebração vibrante da cultura indiana, focada nas cores ricas e texturas dos tecidos, especiarias e da arte, criando uma atmosfera alegre e visualmente estimulante.\n\n**Tema 2: Sabores de Mumbai**\nDescrição: Uma experiência gastronômica que transporta os convidados para as ruas de Mumbai, com foco em comidas de rua autênticas e fáceis de comer, proporcionando uma celebração acessível e deliciosa.\n\n**Tema 3: Bollywood Lounge**\nDescrição: Uma noite relaxante inspirada no glamour de Bollywood, com música ambiente indiana moderna, decoração elegante e coquetéis temáticos, oferecendo um ambiente sofisticado e descontraído.\n"
+        },
+        {
+            "id_evento": "evt_4",
+            "detalhes_fornecidos": {
+                "eventName": "India",
+                "eventType": "Confraternização",
+                "guestCount": "20",
+                "budget": "1000",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: India\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: 20\n- Orçamento Preliminar: 1000\n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Aqui estão 3 temas distintos para o evento \"India\", considerando que se trata de uma confraternização para 20 pessoas com um orçamento de R$1000:\n\n**Tema 1: Cores da Índia**\nDescrição: Uma celebração vibrante da cultura indiana, com foco nas cores ricas e estampas detalhadas presentes em tecidos, arte e especiarias, criando uma atmosfera alegre e festiva.\n\n**Tema 2: Sabores de Mumbai**\nDescrição: Uma imersão gastronômica na culinária de rua de Mumbai, com uma variedade de pratos saborosos e autênticos, proporcionando uma experiência sensorial única e acessível.\n\n**Tema 3: Noite de Bollywood**\nDescrição: Uma homenagem ao cinema indiano, com música animada, dança e a oportunidade de se vestir como estrelas de Bollywood, criando um ambiente divertido e cheio de glamour.\n"
+        },
+        {
+            "id_evento": "evt_5",
+            "detalhes_fornecidos": {
+                "eventName": "India",
+                "eventType": "Confraternização",
+                "guestCount": "20",
+                "budget": "1000",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: India\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: 20\n- Orçamento Preliminar: 1000\n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Com base nos detalhes fornecidos (nome do evento \"India\", confraternização para 20 pessoas, orçamento de 1000), aqui estão 3 temas distintos:\n\n**Tema 1: Cores da Índia**\nDescrição: Uma celebração vibrante da rica paleta de cores da Índia, com foco em decoração, vestimentas e comidas que remetem aos festivais e paisagens indianas.\n\n**Tema 2: Sabores da Índia**\nDescrição: Uma jornada gastronômica pelos diversos sabores da culinária indiana, explorando especiarias, pratos tradicionais e bebidas refrescantes em um ambiente acolhedor.\n\n**Tema 3: Bollywood Night**\nDescrição: Uma noite glamourosa inspirada na indústria cinematográfica indiana, com música animada, dança e decoração que evocam o brilho e a energia de Bollywood.\n"
+        },
+        {
+            "id_evento": "evt_6",
+            "detalhes_fornecidos": {
+                "eventName": "India",
+                "eventType": "Confraternização",
+                "guestCount": "20",
+                "budget": "1000",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: India\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: 20\n- Orçamento Preliminar: 1000\n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Com base nas informações fornecidas, aqui estão 3 sugestões de temas para a confraternização \"India\", levando em conta o número de participantes e o orçamento disponível:\n\n**Tema 1: Cores da Índia**\n\nDescrição: Uma celebração vibrante da rica paleta de cores da Índia, utilizando decoração e vestimenta com tons vivos como laranja, rosa, verde e dourado para criar um ambiente festivo e imersivo.\n\n**Tema 2: Bollywood Night**\n\nDescrição: Uma noite de glamour e diversão inspirada no cinema indiano, com música animada, dança e a possibilidade de os convidados se vestirem como estrelas de Bollywood.\n\n**Tema 3: Sabores da Índia**\n\nDescrição: Uma jornada gastronômica pelos diversos sabores da culinária indiana, oferecendo uma variedade de pratos e especiarias para aguçar o paladar e celebrar a riqueza da cultura indiana através da comida.\n"
+        },
+        {
+            "id_evento": "evt_7",
+            "detalhes_fornecidos": {
+                "eventName": "Hackthon maio2025",
+                "eventType": "Confraternização",
+                "guestCount": "",
+                "budget": "",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: Hackthon maio2025\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: \n- Orçamento Preliminar: \n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Ok, considerando que você ainda não forneceu detalhes como número de pessoas, orçamento e data, vou criar temas flexíveis e amplamente aplicáveis para uma confraternização de um Hackathon chamado \"maio2025\". Os temas buscarão celebrar a inovação, a colaboração e a energia do evento.\n\n**Tema 1: \"Código Criativo: Uma Noite em Pixel Art\"**\n\nDescrição: Transforme a festa em uma celebração da criatividade digital, com decoração inspirada na estética pixel art dos videogames clássicos e da cultura geek.\n\n**Tema 2: \"Conexão & Inovação: O Futuro é Agora\"**\n\nDescrição: Uma noite para celebrar as conexões criadas no Hackathon, com foco em vislumbrar e inspirar o futuro da tecnologia e da inovação.\n\n**Tema 3: \"Desafios Superados: A Celebração dos Hackers\"**\n\nDescrição: Uma festa que reconhece o esforço e a dedicação dos participantes, com uma atmosfera descontraída e divertida para celebrar as conquistas do Hackathon.\n"
+        },
+        {
+            "id_evento": "evt_8",
+            "detalhes_fornecidos": {
+                "eventName": "Hackthon maio2025",
+                "eventType": "Confraternização",
+                "guestCount": "",
+                "budget": "",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: Hackthon maio2025\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: \n- Orçamento Preliminar: \n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Ok, aqui estão 3 temas distintos para o \"Hackthon maio2025\" que se concentram em confraternização, considerando que mais detalhes (número de pessoas, orçamento e objetivo principal) serão fornecidos posteriormente para um ajuste mais preciso:\n\n**Tema 1: \"Bytes & Beats: Conectando o Código ao Ritmo\"**\n\nDescrição: Uma celebração da criatividade e colaboração do Hackathon, onde a energia do código se encontra com a animação da música e da interação social, criando um ambiente descontraído e inspirador.\n\n**Tema 2: \"Desvenda o Futuro: Uma Noite de Inovação e Amizade\"**\n\nDescrição: Uma noite para celebrar as conquistas do Hackathon e inspirar futuras inovações, promovendo a conexão entre os participantes em um ambiente festivo e voltado para o futuro.\n\n**Tema 3: \"Arcade Digital: Game On na Confraternização\"**\n\nDescrição: Transforme a confraternização em uma experiência imersiva inspirada em jogos, com elementos de realidade virtual e desafios lúdicos, fomentando a diversão e a interação entre os participantes do Hackathon.\n"
+        },
+        {
+            "id_evento": "evt_9",
+            "detalhes_fornecidos": {
+                "eventName": "Hackthon maio2025",
+                "eventType": "Confraternização",
+                "guestCount": "",
+                "budget": "",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: Hackthon maio2025\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: \n- Orçamento Preliminar: \n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Ok, para te ajudar a criar os temas, preciso que você me forneça o principal objetivo/mensagem do evento \"Hackathon maio2025\". Com essa informação, posso criar temas que capturem a essência do evento e o tornem memorável.\n\nPor favor, complete a seguinte frase:\n\nO principal objetivo/mensagem do Hackathon maio2025 é: ____________________________\n"
+        },
+        {
+            "id_evento": "evt_10",
+            "detalhes_fornecidos": {
+                "eventName": "Brasil",
+                "eventType": "Lançamento de Produto",
+                "guestCount": "",
+                "budget": "",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: Brasil\n- Tipo de Evento: Lançamento de Produto\n- Número Estimado de Pessoas: \n- Orçamento Preliminar: \n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Ok, entendi. Para te ajudar a criar os temas, preciso que você complete os detalhes do evento. Por favor, me forneça as seguintes informações:\n\n*   **Número Estimado de Pessoas:**\n*   **Orçamento Preliminar:**\n*   **Data Desejada:**\n*   **Principal Objetivo/Mensagem:** (O que a empresa quer transmitir com o lançamento do produto? Qual a mensagem central que o evento deve comunicar aos participantes?)\n\nCom essas informações, poderei criar temas criativos e relevantes para o seu evento \"Brasil\" de lançamento de produto.\n"
+        },
+        {
+            "id_evento": "evt_11",
+            "detalhes_fornecidos": {
+                "eventName": "Brasil",
+                "eventType": "Lançamento de Produto",
+                "guestCount": "",
+                "budget": "",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: Brasil\n- Tipo de Evento: Lançamento de Produto\n- Número Estimado de Pessoas: \n- Orçamento Preliminar: \n- Data Desejada: \n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Ok, entendi. Para te dar sugestões de temas criativos e adequados, preciso que você complete os detalhes do evento que faltam. Em particular, preciso saber:\n\n*   **Número Estimado de Pessoas:** Isso me ajuda a pensar em temas que funcionem para o tamanho do público.\n*   **Orçamento Preliminar:** O orçamento é crucial para definir a viabilidade dos temas e a sofisticação da produção.\n*   **Data Desejada:** A data pode influenciar a escolha de temas, especialmente se coincidir com feriados ou datas comemorativas.\n*   **Principal Objetivo/Mensagem:** Este é o ponto mais importante. Qual é a mensagem principal que a empresa quer transmitir com o lançamento do produto? Qual o sentimento que se deseja evocar nos participantes?\n\nCom essas informações, poderei criar 3 temas distintos e relevantes para o seu evento \"Brasil\".\n\n**Por exemplo, se você me dissesse que:**\n\n*   Número Estimado de Pessoas: 200\n*   Orçamento Preliminar: Médio\n*   Data Desejada: Próximo trimestre\n*   Principal Objetivo/Mensagem: Destacar a inovação e a brasilidade do novo produto, mostrando como ele se conecta com a cultura e o futuro do Brasil.\n\n**Eu poderia sugerir algo como:**\n\nTema 1: Brasil Inovação: Raízes do Futuro\nDescrição: Celebra a união entre a rica herança cultural brasileira e a inovação tecnológica, destacando como o novo produto é um passo em direção ao futuro do país.\n\nTema 2: Cores do Brasil: Um Mosaico de Possibilidades\nDescrição: Apresenta o produto como uma peça fundamental no vibrante mosaico da economia brasileira, explorando a diversidade e o potencial do mercado nacional.\n\nTema 3: Brasil Conectado: Tecendo o Amanhã\nDescrição: Enfatiza a conectividade e o alcance do novo produto, mostrando como ele integra diferentes regiões e pessoas em um futuro mais próspero e interligado.\n\n**Por favor, forneça os detalhes que faltam para que eu possa criar sugestões personalizadas e eficazes!**\n"
+        },
+        {
+            "id_evento": "evt_12",
+            "detalhes_fornecidos": {
+                "eventName": "Brasil",
+                "eventType": "Confraternização",
+                "guestCount": "25",
+                "budget": "1000",
+                "eventDate": "2025-05-03",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: Brasil\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: 25\n- Orçamento Preliminar: 1000\n- Data Desejada: 2025-05-03\n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Aqui estão 3 temas distintos para o evento \"Brasil\", considerando o tipo de evento (confraternização), o número de participantes, orçamento e data, com foco em celebrar a cultura brasileira:\n\n**Tema 1: Brasil em Festa: Cores e Sabores**\nDescrição: Uma celebração vibrante da diversidade cultural brasileira, com foco nas cores alegres, na música contagiante e na culinária rica e variada das diferentes regiões do país.\n\n**Tema 2: Boteco Brasil: Um Encontro Autêntico**\nDescrição: Uma atmosfera descontraída e acolhedora de boteco brasileiro, com petiscos tradicionais, cerveja gelada, jogos e música popular, ideal para promover a interação e o espírito de equipe.\n\n**Tema 3: Amazônia Viva: Sustentabilidade e Celebração**\nDescrição: Uma homenagem à exuberância da Amazônia, com decoração inspirada na floresta, atividades de conscientização ambiental e um cardápio com ingredientes nativos, promovendo a sustentabilidade e a valorização da biodiversidade brasileira.\n"
+        },
+        {
+            "id_evento": "evt_13",
+            "detalhes_fornecidos": {
+                "eventName": "Brasil",
+                "eventType": "Confraternização",
+                "guestCount": "25",
+                "budget": "1000",
+                "eventDate": "2025-05-03",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": [
+                {
+                    "role": "system",
+                    "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos."
+                },
+                {
+                    "role": "user",
+                    "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito."
+                },
+                {
+                    "role": "user",
+                    "content": "Detalhes do Evento:\n- Nome do Evento: Brasil\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: 25\n- Orçamento Preliminar: 1000\n- Data Desejada: 2025-05-03\n- Principal Objetivo/Mensagem: "
+                },
+                {
+                    "role": "user",
+                    "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]"
+                }
+            ],
+            "sugestoes_temas_llm": "Ok, com base nos detalhes fornecidos (evento \"Brasil\" de confraternização para 25 pessoas, com orçamento de R$1000 e data em 03/05/2025), aqui estão 3 temas distintos:\n\nTema 1: **Brasilidade em Cores**\nDescrição: Uma celebração vibrante da cultura brasileira através de uma paleta de cores rica e diversa, evocando alegria e união.\n\nTema 2: **Sabores do Brasil**\nDescrição: Uma viagem gastronômica pelas diferentes regiões do Brasil, explorando os sabores autênticos e a diversidade da culinária nacional.\n\nTema 3: **Ritmos do Brasil**\nDescrição: Uma imersão no universo musical brasileiro, desde o samba e a bossa nova até o forró e o axé, criando um ambiente festivo e dançante.\n"
         }
     ]
 }

@@ -4,7 +4,8 @@ import os
 import json
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
-import google.generativeai as genai
+from openai import OpenAI
+#from IPython.display import Markdown, display, update_display
 
 # Carregar variáveis de ambiente do ficheiro .env
 load_dotenv()
@@ -12,54 +13,64 @@ load_dotenv()
 app = Flask(__name__, template_folder='template', static_folder='static')
 
 # Configurar a API Key do Gemini
-# Certifique-se de que tem a variável GEMINI_API_KEY no seu ficheiro .env
 try:
-    gemini_api_key = os.environ["GEMINI_API_KEY"]
+    gemini_api_key = os.environ.get("GEMINI_API_KEY")
     if not gemini_api_key:
         raise ValueError("A GEMINI_API_KEY não foi definida no ficheiro .env")
-    genai.configure(api_key=gemini_api_key)
-    # Modelo Gemini a ser utilizado (pode ajustar conforme necessário)
-    model = genai.GenerativeModel('gemini-2.0-flash')
+    # OPENAI.api_key = gemini_api_key
+    # Modelo OpenAI a ser utilizado (pode ajustar conforme necessário)
+    model_gemini = "gemini-2.0-flash"  # Ou outro modelo da OpenAI de sua preferência
+    gemini = OpenAI(
+        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+        api_key=gemini_api_key,
+    )
     print("Modelo Gemini configurado com sucesso.")
 except Exception as e:
-    print(f"Erro crucial ao configurar o Gemini: {e}")
-    print("Por favor, verifique se a GEMINI_API_KEY está corretamente definida no seu ficheiro .env.")
-    model = None # Impede a execução se o modelo não estiver configurado
+    print(f"Erro ao configurar o Gemini: {e}")
+    gemini = None  # Impede a execução se o modelo não estiver configurado
 
-DB_FILE = 'event_data_poc.json'
+
+DB_FILE = "event_data_poc.json"
+
 
 def read_db():
     """Lê os dados do ficheiro JSON."""
     if not os.path.exists(DB_FILE):
         return {"eventos_registados": []}
     try:
-        with open(DB_FILE, 'r', encoding='utf-8') as f:
+        with open(DB_FILE, "r", encoding="utf-8") as f:
             # Lidar com ficheiro vazio
             content = f.read()
             if not content:
                 return {"eventos_registados": []}
             return json.loads(content)
     except (json.JSONDecodeError, FileNotFoundError):
-        return {"eventos_registados": []} # Retorna uma estrutura válida em caso de erro
+        return {"eventos_registados": []}  # Retorna uma estrutura válida em caso de erro
+
 
 def write_db(data):
     """Escreve os dados no ficheiro JSON."""
-    with open(DB_FILE, 'w', encoding='utf-8') as f:
+    with open(DB_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
 
-@app.route('/')
+
+@app.route("/")
 def index():
     """Renderiza a página principal do wizard."""
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/api/suggest_themes', methods=['POST'])
+
+@app.route("/api/suggest_themes", methods=["POST"])
 def suggest_themes_route():
     """
     Endpoint da API para receber detalhes do evento e devolver sugestões de temas do LLM.
     Atua como o "Orquestrador" que delega ao "Agente de Tematização" (simulado pelo LLM).
     """
-    if not model:
-        return jsonify({"erro": "O modelo Gemini não está configurado. Verifique a API Key."}), 500
+    if not gemini:
+        return (
+            jsonify({"erro": "O modelo Gemini não está configurado. Verifique a API Key."}),
+            500,
+        )
 
     try:
         event_details = request.json
@@ -70,39 +81,61 @@ def suggest_themes_route():
 
         # --- Lógica do Orquestrador e Prompt para o Agente de Tematização ---
         prompt_parts = [
-            "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos.",
-            "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento.",
-            "Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito.",
-            "\nDetalhes do Evento:",
-            f"- Nome do Evento: {event_details.get('eventName', 'Não especificado')}",
-            f"- Tipo de Evento: {event_details.get('eventType', 'Não especificado')}",
-            f"- Número Estimado de Pessoas: {event_details.get('guestCount', 'Não especificado')}",
-            f"- Orçamento Preliminar: {event_details.get('budget', 'Não especificado')}",
-            f"- Data Desejada: {event_details.get('eventDate', 'Não especificado')}",
-            f"- Principal Objetivo/Mensagem: {event_details.get('eventObjective', 'Não especificado')}",
+            {
+                "role": "system",
+                "content": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos.",
+            },
+            {
+                "role": "user",
+                "content": "Com base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento. Para cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito.",
+            },
+            {
+                "role": "user",
+                "content": f"Detalhes do Evento:\n- Nome do Evento: {event_details.get('eventName', 'Não especificado')}\n- Tipo de Evento: {event_details.get('eventType', 'Não especificado')}\n- Número Estimado de Pessoas: {event_details.get('guestCount', 'Não especificado')}\n- Orçamento Preliminar: {event_details.get('budget', 'Não especificado')}\n- Data Desejada: {event_details.get('eventDate', 'Não especificado')}\n- Principal Objetivo/Mensagem: {event_details.get('eventObjective', 'Não especificado')}",
+            },
         ]
-        if event_details.get('themeIdea'):
-            prompt_parts.append(f"- Ideia Inicial de Tema (do organizador): {event_details.get('themeIdea')}")
+        if event_details.get("themeIdea"):
+            prompt_parts.append(
+                {
+                    "role": "user",
+                    "content": f"- Ideia Inicial de Tema (do organizador): {event_details.get('themeIdea')}",
+                }
+            )
 
-        prompt_parts.append("\nPor favor, formate a sua resposta claramente, listando cada tema e sua descrição.")
-        prompt_parts.append("Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]\n")
-
-        final_prompt = "\n".join(prompt_parts)
-
+        prompt_parts.append(
+            {
+                "role": "user",
+                "content": "Por favor, formate a sua resposta claramente, listando cada tema e sua descrição. Exemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]",
+            }
+        )
         print("\n--- Prompt Estruturado para o Gemini (Agente de Tematização) ---")
-        print(final_prompt)
+        print(prompt_parts)
         print("--- Fim do Prompt ---\n")
 
         # Chamada ao LLM (Gemini)
+        stream = True
         try:
-            response = model.generate_content(final_prompt)
-            # Aceder ao texto da resposta. A API pode variar ligeiramente.
-            # Para gemini-1.5-flash, response.text é comum.
-            # Verifique a documentação se response.parts[0].text for necessário.
-            llm_suggestions_text = response.text
-        except Exception as e_gemini:
-            print(f"Erro ao comunicar com a API do Gemini: {e_gemini}")
-            return jsonify({"erro": f"Não foi possível obter sugestões do LLM: {e_gemini}"}), 503 # Service Unavailable
+            completion = gemini.chat.completions.create(
+                model=model_gemini, 
+                messages=prompt_parts, 
+                stream=stream
+            )
+            if stream:
+                llm_suggestions_text = ""
+                #display_handle = display(Markdown(""), display_id=True)
+                for chunk in completion:
+                    llm_suggestions_text += chunk.choices[0].delta.content or ''
+                    llm_suggestions_text = llm_suggestions_text.replace("```","").replace("markdown", "")
+                    #update_display(Markdown(llm_suggestions_text), display_id=display_handle.display_id)
+            else:
+                llm_suggestions_text = completion.choices[0].message.content
+            
+        except Exception as e_openai:
+            print(f"Erro ao comunicar com a API do OpenAI: {e_openai}")
+            return (
+                jsonify({"erro": f"Não foi possível obter sugestões do LLM: {e_openai}"}),
+                503,
+            )
 
         print(f"Sugestões recebidas do LLM: {llm_suggestions_text}")
 
@@ -111,22 +144,29 @@ def suggest_themes_route():
         novo_evento_registado = {
             "id_evento": f"evt_{len(db_data['eventos_registados']) + 1}",
             "detalhes_fornecidos": event_details,
-            "prompt_enviado_llm": final_prompt, # Para debugging e referência
-            "sugestoes_temas_llm": llm_suggestions_text
+            "prompt_enviado_llm": prompt_parts,  # Para debugging e referência
+            "sugestoes_temas_llm": llm_suggestions_text,
         }
         db_data["eventos_registados"].append(novo_evento_registado)
         write_db(db_data)
 
-        return jsonify({
+        return jsonify(
+            {
             "mensagem": "Sugestões de temas geradas com sucesso!",
-            "sugestoes_temas": llm_suggestions_text
-        })
+                "sugestoes_temas": llm_suggestions_text,
+            }
+        )
 
     except Exception as e:
         print(f"Erro inesperado no endpoint /api/suggest_themes: {e}")
-        return jsonify({"erro": f"Ocorreu um erro interno no servidor: {e}"}), 500
+        return (
+            jsonify({"erro": f"Ocorreu um erro interno no servidor: {e}"}),
+            500,
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Garante que as pastas 'templates' e 'static' existem no mesmo nível que app.py
     # ou ajuste os caminhos em Flask(..., template_folder=..., static_folder=...)
     app.run(debug=True, port=5001) 
+
