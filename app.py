@@ -9,7 +9,7 @@ import google.generativeai as genai
 # Carregar variáveis de ambiente do ficheiro .env
 load_dotenv()
 
-app = Flask(__name__, template_folder='templates', static_folder='static')
+app = Flask(__name__, template_folder='template', static_folder='static')
 
 # Configurar a API Key do Gemini
 # Certifique-se de que tem a variável GEMINI_API_KEY no seu ficheiro .env
@@ -19,7 +19,7 @@ try:
         raise ValueError("A GEMINI_API_KEY não foi definida no ficheiro .env")
     genai.configure(api_key=gemini_api_key)
     # Modelo Gemini a ser utilizado (pode ajustar conforme necessário)
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')
+    model = genai.GenerativeModel('gemini-2.0-flash')
     print("Modelo Gemini configurado com sucesso.")
 except Exception as e:
     print(f"Erro crucial ao configurar o Gemini: {e}")

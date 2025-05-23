@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POC Organizador de Eventos IA</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
     <div class="container">
@@ -70,13 +70,15 @@
                 </div>
             </form>
 
-            <section id="resultsSection" style="display:none;">
+            <section id="resultsSection">
                 <h2>Sugestões de Temas Geradas pela IA:</h2>
-                <div id="loadingIndicator" style="display:none;">
+                <div id="loadingIndicator">
                     <p>A processar com o Gemini... Por favor, aguarde.</p>
                     <div class="spinner"></div>
                 </div>
-                <div id="errorMessage" class="error-message" style="display:none;"></div>
+                
+                <div id="errorMessage" class="error-message">
+                </div>
                 <pre id="themeSuggestionsOutput" class="results-output"></pre>
             </section>
         </main>
@@ -86,6 +88,6 @@
         </footer>
     </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="static/js/script.js"></script>
 </body>
 </html> 

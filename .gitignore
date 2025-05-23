@@ -2,12 +2,12 @@
 # Ficheiro para o Git ignorar ficheiros e pastas desnecessários.
 
 # Ambiente Virtual Python
-venv/
+.venv/
 *.pyc
 __pycache__/
-
+.vscode/
 # Ficheiro de variáveis de ambiente
-.env
+#.env
 
 # Ficheiros de base de dados (se aplicável, para além da POC)
 *.sqlite3

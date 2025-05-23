@@ -1,0 +1,32 @@
+{
+    "eventos_registados": [
+        {
+            "id_evento": "evt_1",
+            "detalhes_fornecidos": {
+                "eventName": "ola",
+                "eventType": "Confraternização",
+                "guestCount": "",
+                "budget": "",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos.\nCom base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento.\nPara cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito.\n\nDetalhes do Evento:\n- Nome do Evento: ola\n- Tipo de Evento: Confraternização\n- Número Estimado de Pessoas: \n- Orçamento Preliminar: \n- Data Desejada: \n- Principal Objetivo/Mensagem: \n\nPor favor, formate a sua resposta claramente, listando cada tema e sua descrição.\nExemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]\n",
+            "sugestoes_temas_llm": "Ok, compreendo. Para criar os temas, preciso de mais informações sobre o \"Principal Objetivo/Mensagem\" que a empresa deseja transmitir na confraternização \"Olá\". Sem essa informação, os temas serão genéricos.\n\n**Assumindo que o objetivo principal seja celebrar as conquistas do ano e fortalecer o espírito de equipe para o próximo ano, aqui estão 3 temas sugeridos:**\n\n**Tema 1: Olá, Horizonte!**\nDescrição: Celebrando as conquistas de hoje, juntos, enquanto olhamos para as oportunidades e desafios do futuro com entusiasmo e colaboração.\n\n**Tema 2: Olá, Conexão!**\nDescrição: Reforçando os laços que nos unem como equipe, este é um momento para celebrar nossas conquistas e nos conectarmos uns com os outros em um ambiente descontraído.\n\n**Tema 3: Olá, Celebrar!**\nDescrição: Um brinde às conquistas do ano! Uma noite para desfrutar, relaxar e comemorar o sucesso que alcançamos juntos.\n\n**Observação:** Assim que você me fornecer o \"Principal Objetivo/Mensagem\" real do evento, posso criar temas mais personalizados e impactantes.\n"
+        },
+        {
+            "id_evento": "evt_2",
+            "detalhes_fornecidos": {
+                "eventName": "Brasil",
+                "eventType": "Team Building",
+                "guestCount": "25",
+                "budget": "1000",
+                "eventDate": "",
+                "eventObjective": "",
+                "themeIdea": ""
+            },
+            "prompt_enviado_llm": "Você é um assistente especialista em criar temas criativos e adequados para eventos corporativos.\nCom base nos seguintes detalhes fornecidos pelo organizador, sugira 3 (três) temas distintos para o evento.\nPara cada tema, forneça um nome conciso e uma breve descrição (1-2 frases) que explique o conceito.\n\nDetalhes do Evento:\n- Nome do Evento: Brasil\n- Tipo de Evento: Team Building\n- Número Estimado de Pessoas: 25\n- Orçamento Preliminar: 1000\n- Data Desejada: \n- Principal Objetivo/Mensagem: \n\nPor favor, formate a sua resposta claramente, listando cada tema e sua descrição.\nExemplo de formato para cada tema:\nTema 1: [Nome do Tema 1]\nDescrição: [Descrição do Tema 1]\n",
+            "sugestoes_temas_llm": "Perfeito! Com base nas informações fornecidas, aqui estão 3 temas distintos para o evento de Team Building \"Brasil\", considerando o orçamento e o número de participantes:\n\n**Tema 1: Brasil Criativo: Cores e Sabores Nacionais**\n\nDescrição: Uma imersão nas cores vibrantes da cultura brasileira e nos sabores únicos da nossa culinária, estimulando a criatividade e o trabalho em equipe através de atividades artísticas e gastronômicas.\n\n**Tema 2: Expedição Brasil: Desvendando Tesouros Escondidos**\n\nDescrição: Uma jornada lúdica por diferentes regiões do Brasil, desafiando os participantes a resolverem enigmas e cumprirem tarefas que representem a diversidade geográfica e cultural do país.\n\n**Tema 3: Conexão Brasil: Construindo Pontes entre Talentos**\n\nDescrição: Focado na colaboração e na sinergia, este tema propõe dinâmicas que conectam os participantes, explorando suas habilidades individuais para construir soluções inovadoras e fortalecer o espírito de equipe, inspirado na força do Brasil em unir diferentes talentos.\n"
+        }
+    ]
+}

@@ -110,6 +110,7 @@ button[type="submit"]:hover {
     background-color: #f0f8ff; /* Azul claro */
     border: 1px solid #cce7ff;
     border-radius: 8px;
+    display: none; /* Added for consistency */
 }
 
 #resultsSection h2 {
@@ -138,12 +139,14 @@ button[type="submit"]:hover {
     padding: 10px;
     border-radius: 6px;
     margin-bottom: 15px;
+    display: none; /* Added for consistency */
 }
 
 #loadingIndicator {
     text-align: center;
     padding: 20px;
     color: #0056b3;
+    display: none; /* Added for consistency */
 }
 
 .spinner {
