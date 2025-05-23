@@ -1,0 +1,21 @@
+# .gitignore
+# Ficheiro para o Git ignorar ficheiros e pastas desnecessários.
+
+# Ambiente Virtual Python
+venv/
+*.pyc
+__pycache__/
+
+# Ficheiro de variáveis de ambiente
+.env
+
+# Ficheiros de base de dados (se aplicável, para além da POC)
+*.sqlite3
+*.db
+
+# Ficheiros de log
+*.log
+
+# Ficheiros específicos do OS
+.DS_Store
+Thumbs.db 

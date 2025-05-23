@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POC Organizador de Eventos IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Organizador de Eventos Corporativos IA</h1>
+            <p>Preencha os detalhes abaixo para obter sugestões de temas com IA.</p>
+        </header>
+
+        <main>
+            <form id="eventWizardForm">
+                <fieldset>
+                    <legend>Informações Básicas do Evento</legend>
+
+                    <div class="form-group">
+                        <label for="eventName">Nome do Evento:</label>
+                        <input type="text" id="eventName" name="eventName" placeholder="Ex: Confraternização Anual XPTO" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventType">Tipo de Evento:</label>
+                        <select id="eventType" name="eventType">
+                            <option value="Confraternização">Confraternização</option>
+                            <option value="Treinamento">Treinamento</option>
+                            <option value="Lançamento de Produto">Lançamento de Produto</option>
+                            <option value="Workshop">Workshop</option>
+                            <option value="Conferência">Conferência</option>
+                            <option value="Team Building">Team Building</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Detalhes Adicionais</legend>
+                    <div class="form-group">
+                        <label for="guestCount">Número Estimado de Pessoas:</label>
+                        <input type="number" id="guestCount" name="guestCount" min="1" placeholder="Ex: 50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="budget">Orçamento Preliminar (opcional):</label>
+                        <input type="text" id="budget" name="budget" placeholder="Ex: Até 5000 EUR">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDate">Data Desejada (opcional):</label>
+                        <input type="date" id="eventDate" name="eventDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventObjective">Principal Objetivo/Mensagem do Evento:</label>
+                        <textarea id="eventObjective" name="eventObjective" rows="3" placeholder="Ex: Celebrar conquistas, promover integração, lançar novo produto..."></textarea>
+                    </div>
+
+                     <div class="form-group">
+                        <label for="themeIdea">Alguma ideia inicial de Tema? (Opcional)</label>
+                        <input type="text" id="themeIdea" name="themeIdea" placeholder="Ex: Anos 80, Futurista, etc.">
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button type="submit" id="submitButton">Obter Sugestões de Temas</button>
+                </div>
+            </form>
+
+            <section id="resultsSection" style="display:none;">
+                <h2>Sugestões de Temas Geradas pela IA:</h2>
+                <div id="loadingIndicator" style="display:none;">
+                    <p>A processar com o Gemini... Por favor, aguarde.</p>
+                    <div class="spinner"></div>
+                </div>
+                <div id="errorMessage" class="error-message" style="display:none;"></div>
+                <pre id="themeSuggestionsOutput" class="results-output"></pre>
+            </section>
+        </main>
+
+        <footer>
+            <p>POC - Organizador de Eventos com IA & Gemini</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> 
