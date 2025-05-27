@@ -1,0 +1,44 @@
+[
+  {
+    "nome": "Carlos Alberto Nóbrega",
+    "email": "carlos@empresa.com",
+    "presenca_confirmada": true,
+    "restricao_alimentar": "Vegetariano"
+  },
+  {
+    "nome": "Maria Joaquina de Amaral Pereira Góes",
+    "email": "maria.j@empresa.com",
+    "presenca_confirmada": true,
+    "restricao_alimentar": "Sem glúten"
+  },
+  {
+    "nome": "João Kleber",
+    "email": "joao.k@empresa.com",
+    "presenca_confirmada": false,
+    "restricao_alimentar": "Nenhuma"
+  },
+  {
+    "nome": "Fausto Silva",
+    "email": "fausto@empresa.com",
+    "presenca_confirmada": true,
+    "restricao_alimentar": "Nenhuma"
+  },
+  {
+    "nome": "Silvio Santos",
+    "email": "silvio@empresa.com",
+    "presenca_confirmada": true,
+    "restricao_alimentar": "Sem lactose"
+  },
+  {
+    "nome": "Hebe Camargo",
+    "email": "hebe@empresa.com",
+    "presenca_confirmada": true,
+    "restricao_alimentar": "Alérgico a camarão"
+  },
+  {
+    "nome": "Regina Casé",
+    "email": "regina@empresa.com",
+    "presenca_confirmada": true,
+    "restricao_alimentar": "Vegano"
+  }
+]
