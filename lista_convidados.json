@@ -34,5 +34,11 @@
     "email": "hebe@empresa.com",
     "presenca_confirmada": true,
     "restricao_alimentar": "Alérgico a camarão"
+  },
+  {
+    "nome": "Regina Casé",
+    "email": "regina@empresa.com",
+    "presenca_confirmada": true,
+    "restricao_alimentar": "Vegano"
   }
 ]

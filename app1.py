@@ -17,8 +17,12 @@ try:
             st.stop()
 
     genai.configure(api_key=GEMINI_API_KEY)
-    model = genai.GenerativeModel('gemini-2.0-flash')
-    print("Modelo Gemini configurado com sucesso.")
+    # A inicialização do client foi movida para dentro das funções dos agentes
+    # para permitir a especificação do model_id por chamada, se necessário,
+    # ou para usar diferentes clientes/configurações por modelo no futuro.
+    # client = genai.Client() # Removido daqui
+    global_model_id = 'gemini-1.5-flash-latest' # Atualizado para um modelo mais recente e flexível
+    print("Configuração da API Gemini verificada.")
 except Exception as e:
     st.error(f"Deu ruim na configuração do Gemini: {e}")
     st.stop()
@@ -44,10 +48,29 @@ create_mock_guest_list()
 
 # --- Funções dos Agentes (Simuladas e com Chamadas ao Gemini) ---
 
+def get_gemini_model(model_id_requested):
+    """Helper para obter o modelo generativo."""
+    try:
+        return genai.GenerativeModel(model_id_requested)
+    except Exception as e:
+        st.error(f"Erro ao carregar o modelo {model_id_requested}: {e}")
+        # Fallback para um modelo padrão se o solicitado falhar, ou poderia parar.
+        # Por simplicidade, tentaremos o global_model_id como fallback.
+        if model_id_requested != global_model_id:
+            try:
+                st.warning(f"Tentando fallback para {global_model_id}")
+                return genai.GenerativeModel(global_model_id)
+            except Exception as e_fallback:
+                st.error(f"Erro ao carregar modelo de fallback {global_model_id}: {e_fallback}")
+                raise e_fallback # Re-lança a exceção se o fallback também falhar
+        raise e # Re-lança a exceção original se o modelo solicitado já era o global ou se não há fallback
+
 def agente_otimizador_festas(usar_feedback_passado):
+    model_id = global_model_id
     st.write("🧐 **Agente Otimizador de Festas consultando os universitários:** Relembrando os sucessos (e os micos) passados!")
     if usar_feedback_passado:
         try:
+            model = get_gemini_model(model_id)
             prompt = """
             Você é um consultor de eventos experiente e bem-humorado.
             Com base em "pesquisas de satisfação de eventos corporativos anteriores" (use seu conhecimento geral sobre o que funciona e o que não funciona),
@@ -62,8 +85,10 @@ def agente_otimizador_festas(usar_feedback_passado):
     return ["Sem olhar para o passado desta vez? Ok, vida que segue, festa que surge! (Mas sério, um bom DJ faz milagres)."]
 
 def agente_batizador_eventos(tipo_evento, objetivo_evento_str):
+    model_id = 'gemini-1.5-flash-latest' # Usar um modelo mais recente
     st.write("🕵️‍♂️ **Agente Batizador entrando em cena:** Preparando nomes tão bons que vão virar meme!")
     try:
+        model = get_gemini_model(model_id)
         prompt = f"""
         Você é um especialista em criar nomes para eventos corporativos, com um toque de humor e criatividade.
         Sugira 5 nomes engraçados e originais para um evento do tipo '{tipo_evento}'.
@@ -78,8 +103,10 @@ def agente_batizador_eventos(tipo_evento, objetivo_evento_str):
         return ["Erro ao gerar nomes. Que tal 'Festa Surpresa do Chefe Que Não Sabe'?"]
 
 def agente_sugestao_tema_com_restricoes(tipo_evento, ideia_tema_inicial, resumo_restricoes_str, sugestoes_comida_str=None):
+    model_id = 'gemini-1.5-pro-latest' # Usar um modelo mais robusto para tarefas complexas
     st.write("🎨 **Agente de Sugestão de Temas (com olhar clínico para dietas e cardápios) em ação!**")
     try:
+        model = get_gemini_model(model_id)
         prompt_parts = [
             f"Você é um planejador de eventos criativo e consciente, especializado em sugerir temas para eventos corporativos do tipo '{tipo_evento}'.",
             "Sugira 3 temas originais e divertidos."
@@ -107,8 +134,7 @@ def agente_sugestao_tema_com_restricoes(tipo_evento, ideia_tema_inicial, resumo_
             "Amigável às Dietas/Comida: Extremamente versátil! Cada estação pode ter opções vegetarianas, veganas, sem glúten, etc., e se alinha bem com um conceito de 'comida internacional'."
         ])
         prompt = "\n".join(prompt_parts)
-        # st.write(f"Debug - Prompt para Agente Sugestão de Temas:\n```\n{prompt}\n```")
-
+        
         response = model.generate_content(prompt)
         sugestoes_formatadas = response.text.strip().split('\n\n') 
         if len(sugestoes_formatadas) < 2 and "\nNome:" in response.text: 
@@ -120,8 +146,8 @@ def agente_sugestao_tema_com_restricoes(tipo_evento, ideia_tema_inicial, resumo_
         st.error(f"O Agente de Sugestão de Temas está com bloqueio criativo (e técnico): {e}")
         return ["Tema Sugerido: 'A Festa do Improviso' (porque deu ruim aqui)."]
 
-
 def agente_localizacao(tipo_evento, tema_final_escolhido, tipo_local_desejado, resumo_restricoes_str=None, sugestoes_comida_str=None, local_interno_especifico=None):
+    model_id = 'gemini-2.5-pro-preview-tts' # Usar um modelo mais robusto
     st.write("🗺️ **Agente de Localização com o mapa na mão:** Procurando o esconderijo perfeito, considerando tema, dietas e tipos de comida!")
     sugestoes = []
     contatos_simulados = {}
@@ -135,6 +161,7 @@ def agente_localizacao(tipo_evento, tema_final_escolhido, tipo_local_desejado, r
 
     elif tipo_local_desejado == "Externo":
         try:
+            model = get_gemini_model(model_id)
             prompt_local_parts = [
                 "Você é um assistente de planejamento de eventos especializado em encontrar locais externos.",
                 f"Para um evento corporativo do tipo '{tipo_evento}'"
@@ -145,7 +172,7 @@ def agente_localizacao(tipo_evento, tema_final_escolhido, tipo_local_desejado, r
             prompt_local_parts.append(f"Sugira 2 opções de tipos de locais externos adequados (ex: Restaurante Temático que combine com o tema, Salão de Festas versátil, Chácara com boa estrutura).")
 
             if resumo_restricoes_str and "nenhuma" not in resumo_restricoes_str.lower() and "aparentemente" not in resumo_restricoes_str.lower() and "entrada manual" not in resumo_restricoes_str.lower() and "erro na leitura" not in resumo_restricoes_str.lower():
-                 prompt_local_parts.append(f"Restrições alimentares predominantes no grupo: '{resumo_restricoes_str}'.")
+                prompt_local_parts.append(f"Restrições alimentares predominantes no grupo: '{resumo_restricoes_str}'.")
             
             if sugestoes_comida_str and "nenhuma" not in sugestoes_comida_str.lower() and "flexível" not in sugestoes_comida_str.lower():
                 prompt_local_parts.append(f"Conceitos de comida sugeridos com base nas dietas: '{sugestoes_comida_str}'.")
@@ -161,8 +188,6 @@ def agente_localizacao(tipo_evento, tema_final_escolhido, tipo_local_desejado, r
             ])
             prompt_local = "\n".join(prompt_local_parts)
             
-            # st.write(f"Debug - Prompt para Agente Localização:\n```\n{prompt_local}\n```")
-
             response = model.generate_content(prompt_local)
             raw_sugestoes_bruto = response.text.strip()
             raw_sugestoes = []
@@ -200,25 +225,25 @@ def agente_localizacao(tipo_evento, tema_final_escolhido, tipo_local_desejado, r
                     except Exception as e_parse:
                         print(f"Erro ao parsear sugestão de local para contato: {sug_completa} - Erro: {e_parse}")
             if not sugestoes:
-                 sugestoes.append("O Agente de Localização está consultando o Google Maps da alma... por enquanto, que tal um piquenique no parque se o tempo ajudar (e se não tiver restrição a formigas)?")
+                sugestoes.append("O Agente de Localização está consultando o Google Maps da alma... por enquanto, que tal um piquenique no parque se o tempo ajudar (e se não tiver restrição a formigas)?")
         except Exception as e:
             st.error(f"O Agente de Localização se perdeu no caminho: {e}")
             sugestoes.append("Deu pane no GPS do Agente de Localização. Sugestão: festa no metaverso? Lá todo mundo come pixel!")
         return sugestoes, contatos_simulados
     return ["Tipo de local não especificado claramente."], contatos_simulados
 
-
 def agente_convidados_dietas(usar_json, arquivo_json_carregado):
+    model_id = global_model_id 
     st.write("📋 **Agente de Convidados e Dietas na área:** De olho na lista VIP e nos 'não posso isso, não como aquilo'!")
     sugestoes_tipo_comida_str = "Cardápio flexível é uma boa pedida!" # Default
     
     if usar_json and arquivo_json_carregado:
         try:
-            if hasattr(arquivo_json_carregado, 'getvalue'):
-                 guest_data = json.loads(arquivo_json_carregado.getvalue().decode('utf-8'))
-                 arquivo_json_carregado.seek(0)
-            else:
-                 with open(arquivo_json_carregado, 'r', encoding='utf-8') as f:
+            if hasattr(arquivo_json_carregado, 'getvalue'): # UploadedFile object
+                guest_data = json.loads(arquivo_json_carregado.getvalue().decode('utf-8'))
+                arquivo_json_carregado.seek(0) # Resetar o ponteiro do arquivo para futuras leituras
+            else: # Path to file (string)
+                with open(arquivo_json_carregado, 'r', encoding='utf-8') as f:
                     guest_data = json.load(f)
 
             confirmados = [p for p in guest_data if p.get("presenca_confirmada")]
@@ -240,10 +265,11 @@ def agente_convidados_dietas(usar_json, arquivo_json_carregado):
                     resumo_para_prompt = ", ".join(lista_simples_restricoes)
                 
                 resumo_detalhado_restricoes = "Resumo das 'dietas especiais' da galera:\n" + \
-                                   "\n".join([f"- {tipo}: {qtd} pessoa(s)" for tipo, qtd in restricoes.items()])
+                                            "\n".join([f"- {tipo}: {qtd} pessoa(s)" for tipo, qtd in restricoes.items()])
                 
                 # Nova chamada ao Gemini para sugerir tipos de comida
                 try:
+                    model = get_gemini_model(model_id)
                     prompt_comida = f"""
                     Com base nas seguintes restrições alimentares de um grupo: {resumo_para_prompt}.
                     Sugira 2-3 tipos de culinária ou conceitos de buffet que seriam adequados e inclusivos para este grupo.
@@ -260,9 +286,10 @@ def agente_convidados_dietas(usar_json, arquivo_json_carregado):
         except Exception as e:
             st.error(f"Ih, deu chabú ao ler o arquivo JSON dos convidados: {e}")
             return 0, "Não consegui ler a lista de convidados. Verifica o arquivo, por favor!", "Erro na leitura", sugestoes_tipo_comida_str
-    elif usar_json:
+    elif usar_json: # Se usar_json é True, mas arquivo_json_carregado é None
         return 0, "Você disse que ia usar a lista, mas cadê o arquivo, meu consagrado?", "JSON não carregado", sugestoes_tipo_comida_str
     
+    # Caso de não usar JSON (entrada manual de público)
     return None, "Número de pessoas a ser definido manualmente (restrições não analisadas).", "Entrada manual de público", sugestoes_tipo_comida_str
 
 def agente_orcamentista(valor_disponivel, num_pessoas, tema_final_escolhido=None, sugestoes_locais_com_contatos=None):
@@ -289,41 +316,45 @@ def agente_orcamentista(valor_disponivel, num_pessoas, tema_final_escolhido=None
         feedback_locais.append("\n**Análise de Custo para Locais Externos (Estimativa da POC):**")
         for nome_local, contato_str in sugestoes_locais_com_contatos.items(): 
             custo_simulado_por_pessoa = 0
+            # Simulação de custo baseada no nome do local (apenas para POC)
             if isinstance(nome_local, str) and ("restaurante" in nome_local.lower() or "bistrô" in nome_local.lower() or "bar" in nome_local.lower()):
+                # Tenta obter custo de variável de ambiente, senão usa um default pseudo-aleatório
                 custo_simulado_por_pessoa = float(os.getenv(f"CUSTO_POC_{nome_local.upper().replace(' ','_')}", default=75 + len(nome_local) % 50)) 
-                custo_total_local = custo_simulado_por_pessoa * (num_pessoas or 1)
+                custo_total_local = custo_simulado_por_pessoa * (num_pessoas or 1) # Garante que num_pessoas não seja None
                 feedback_locais.append(
                     f"- **{nome_local}:** Estimativa POC de R${custo_simulado_por_pessoa:.2f}/pessoa. "
                     f"Custo total estimado para {num_pessoas or 'X'} pessoas: R${custo_total_local:.2f}. Contato (simulado): {contato_str}"
                 )
-            else:
-                 feedback_locais.append(f"- **{nome_local}:** Custo a verificar (não parece ser um restaurante para cálculo automático de POC). Contato (simulado): {contato_str}")
+            else: # Para locais não classificados como restaurantes, não simula custo
+                feedback_locais.append(f"- **{nome_local}:** Custo a verificar (não parece ser um restaurante para cálculo automático de POC). Contato (simulado): {contato_str}")
     
     final_feedback = feedback_geral
     if feedback_locais:
         final_feedback += "\n" + "\n".join(feedback_locais)
     return final_feedback
 
-
 def agente_transporte(num_pessoas, local_evento_str, precisa_transporte_flag):
+    model_id = 'gemini-2.5-pro-preview-tts' # Usar um modelo mais robusto
     st.write("🚌 **Agente de Transporte engatando a primeira:** Levando a galera pro rolê!")
     if not precisa_transporte_flag:
         return "Transporte por conta da galera? Menos uma preocupação (ou mais uma, dependendo do trânsito!)."
     
     local_evento_nome_curto = local_evento_str
+    # Tenta extrair apenas o nome do local da string completa
     if isinstance(local_evento_str, str) and "-" in local_evento_str:
         try: 
             local_evento_nome_curto = local_evento_str.split(" - Justificativa:")[0].split(": ",1)[1].strip()
         except:
-             pass
+            pass # Mantém local_evento_str original se o parsing falhar
 
-    if not local_evento_nome_curto or "Interno na Empresa" in local_evento_nome_curto: 
+    if not local_evento_nome_curto or "Interno na Empresa" in local_evento_nome_curto: # Se for interno, não precisa de transporte
         return "Festa em casa (na empresa), então cada um com seu teletransporte (ou carro mesmo)."
 
     if num_pessoas is None or num_pessoas == 0:
         return "Sem saber quanta gente vai, fica difícil chamar o Uber ou o ônibus espacial."
 
     try:
+        model = get_gemini_model(model_id)
         prompt = f"""
         Você é um especialista em logística de transporte para eventos corporativos.
         Para um evento externo com aproximadamente {num_pessoas} pessoas, que acontecerá em '{local_evento_nome_curto}',
@@ -336,7 +367,6 @@ def agente_transporte(num_pessoas, local_evento_str, precisa_transporte_flag):
     except Exception as e:
         st.error(f"O Agente de Transporte furou o pneu: {e}")
         return "Deu ruim no transporte. Sugestão: todo mundo de patinete?"
-
 
 # --- Controle do Wizard (Estado da Sessão) ---
 if 'page' not in st.session_state:
@@ -354,6 +384,9 @@ if 'sugestoes_nomes_cache' not in st.session_state:
     st.session_state.sugestoes_nomes_cache = None
 if 'sugestoes_temas_cache' not in st.session_state:
     st.session_state.sugestoes_temas_cache = None
+# Cache para o novo agente de vídeo
+if 'conceito_video_cache' not in st.session_state:
+    st.session_state.conceito_video_cache = None
 
 
 def next_page():
@@ -366,7 +399,7 @@ def prev_page():
 
 # --- Interface do Wizard ---
 st.set_page_config(page_title="Planejador de Festas Malucas IA", layout="wide")
-st.image("https://placehold.co/800x200/007bff/FFFFFF?text=Planejador+de+Festas+Corporativas+IA&font=sans-serif", use_container_width=True)
+st.image("https://placehold.co/800x200/007bff/FFFFFF?text=Planejador+de+Festas+Corporativas+IA&font=sans-serif", use_container_width=True) # Imagem de placeholder
 st.title("🎉 Planejador de Festas Corporativas IA 🎉")
 st.subheader("Seu copiloto para eventos tão épicos que nem o chefe vai esquecer!")
 
@@ -412,7 +445,7 @@ if st.session_state.page == 1:
             if 'objetivos_personalizados' not in st.session_state.event_data:
                 st.session_state.event_data['objetivos_personalizados'] = []
             st.session_state.event_data['objetivos_personalizados'].append(st.session_state.objetivo_custom_temp_input)
-            st.session_state.objetivo_custom_temp_input = ""
+            st.session_state.objetivo_custom_temp_input = "" # Limpar o campo
             st.rerun()
         else:
             st.warning("Escreva alguma coisa aí, ué! Objetivo em branco não vale.")
@@ -424,9 +457,9 @@ if st.session_state.page == 1:
             with col1_obj: st.markdown(f"- {obj_custom}")
             with col2_obj:
                 if st.button(f"🗑️", key=f"del_custom_obj_pg1_{i}", help="Remover este objetivo personalizado"):
-                    objetivos_para_remover.append(i)
+                    objetivos_para_remover.append(i) # Adicionar índice para remoção
         if objetivos_para_remover:
-            for index_to_remove in sorted(objetivos_para_remover, reverse=True):
+            for index_to_remove in sorted(objetivos_para_remover, reverse=True): # Remover de trás para frente
                 st.session_state.event_data['objetivos_personalizados'].pop(index_to_remove)
             st.rerun()
     if st.button("Próximo Passo: Orçamento e Convidados 👥", on_click=next_page, key="btn_prox_1_final_v2"): pass 
@@ -453,19 +486,26 @@ elif st.session_state.page == 2:
             "Quantas almas (estimadas) participarão?", min_value=1,
             value=st.session_state.event_data.get('quantidade_pessoas_manual', 10), step=1, key="qtd_manual_pg2_new"
         )
+        # Limpar dados de JSON se o manual for escolhido
+        if 'arquivo_json_obj' in st.session_state.event_data:
+            st.session_state.event_data['arquivo_json_obj'] = None
     else:
         st.markdown(f"Ok, vamos de JSON! Certifique-se que ele tem os campos: `nome`, `email`, `presenca_confirmada` (true/false), `restricao_alimentar`.\nUm arquivo de exemplo (`{GUEST_LIST_FILE}`) já está na área!")
-        if 'uploader_key_count' not in st.session_state:
+        if 'uploader_key_count' not in st.session_state: # Para resetar o uploader se necessário
             st.session_state.uploader_key_count = 0
         
         arquivo_json_carregado = st.file_uploader(
             "Carregue o arquivo JSON da lista de presença:", 
             type=['json'], 
-            key=f"uploader_convidados_pg2_new_{st.session_state.uploader_key_count}"
+            key=f"uploader_convidados_pg2_new_{st.session_state.uploader_key_count}" # Chave dinâmica para permitir re-upload
             )
-        st.session_state.event_data['arquivo_json_obj'] = arquivo_json_carregado
+        st.session_state.event_data['arquivo_json_obj'] = arquivo_json_carregado # Salva o objeto do arquivo
         if arquivo_json_carregado: st.success("Arquivo JSON carregado!")
         else: st.warning("Esperando o arquivo JSON dos convidados...")
+        # Limpar dados manuais se JSON for escolhido
+        if 'quantidade_pessoas_manual' in st.session_state.event_data:
+            st.session_state.event_data['quantidade_pessoas_manual'] = None
+
 
     col1, col2 = st.columns(2)
     with col1:
@@ -485,23 +525,45 @@ elif st.session_state.page == 3:
             index=0 if st.session_state.event_data.get('festa_tematica_raw', "Sim") == "Sim" else 1,
             key="radio_festa_tematica_pg3_new"
         )
-        st.session_state.event_data['festa_tematica'] = festa_tematica_escolha
-        st.session_state.event_data['festa_tematica_raw'] = "Sim" if festa_tematica_escolha == "Sim, vai ser temática!" else "Não"
+        st.session_state.event_data['festa_tematica'] = festa_tematica_escolha # Salva a string completa
+        st.session_state.event_data['festa_tematica_raw'] = "Sim" if festa_tematica_escolha == "Sim, vai ser temática!" else "Não" # Salva 'Sim' ou 'Não'
         if st.session_state.event_data['festa_tematica_raw'] == "Sim":
             st.session_state.event_data['ideia_tema'] = st.text_input(
                 "Qual o tema da bagunça? (Opcional, deixe em branco se quiser sugestões da IA)",
                 value=st.session_state.event_data.get('ideia_tema', ''), key="ideia_tema_pg3_new",
                 placeholder="Ex: Anos 80, Baile de Máscaras, Hollywood..."
             )
-    else:
-        st.info(f"Como é um evento de '{st.session_state.event_data.get('tipo_evento')}', pulamos a parte do tema. Mas se quiser dar um toque especial, anota aí!")
-        st.session_state.event_data['festa_tematica_raw'] = "Não" 
+        # else: # Se não for temática, não precisa limpar 'ideia_tema', pode ser útil se o usuário mudar de ideia
+        #    st.session_state.event_data['ideia_tema'] = ''
+    else: # Para outros tipos de evento, tema é opcional mas pode ser adicionado
+        st.info(f"Como é um evento de '{st.session_state.event_data.get('tipo_evento')}', a temática é opcional. Se quiser adicionar um tema, pode fazê-lo abaixo.")
+        st.session_state.event_data['festa_tematica_raw'] = st.radio(
+             "Gostaria de adicionar um tema a este evento?",
+            ("Sim", "Não"), index=1, key="radio_tema_opcional_pg3", horizontal=True
+        )
+        if st.session_state.event_data['festa_tematica_raw'] == "Sim":
+            st.session_state.event_data['ideia_tema'] = st.text_input(
+                "Qual seria o tema? (Opcional)",
+                value=st.session_state.event_data.get('ideia_tema', ''), key="ideia_tema_opcional_pg3",
+                placeholder="Ex: Inovação Futura, Conexões Estratégicas..."
+            )
+        else:
+             st.session_state.event_data['ideia_tema'] = ''
 
-    default_date = st.session_state.event_data.get('data_prevista_dt', datetime.date.today() + datetime.timedelta(days=30))
-    st.session_state.event_data['data_prevista'] = st.date_input(
-        "E quando vai rolar esse regabofe/aprendizado intensivo?", value=default_date, key="data_prevista_pg3_new"
+
+    # Garantir que data_prevista_dt exista antes de usá-la como default
+    if 'data_prevista_dt' not in st.session_state.event_data or st.session_state.event_data['data_prevista_dt'] is None:
+        st.session_state.event_data['data_prevista_dt'] = datetime.date.today() + datetime.timedelta(days=30)
+    
+    default_date = st.session_state.event_data['data_prevista_dt']
+    
+    st.session_state.event_data['data_prevista'] = st.date_input( # Este será o objeto date retornado pelo date_input
+        "E quando vai rolar esse regabofe/aprendizado intensivo?", 
+        value=default_date, 
+        min_value=datetime.date.today(), # Não permitir datas passadas
+        key="data_prevista_pg3_new"
     )
-    st.session_state.event_data['data_prevista_dt'] = st.session_state.event_data['data_prevista']
+    st.session_state.event_data['data_prevista_dt'] = st.session_state.event_data['data_prevista'] # Atualiza dt com o valor do input
 
     st.subheader("📍 Onde vai ser o ponto de encontro dessa galera animada?")
     tipo_local_opcoes = ["Interno na Empresa", "Externo"]
@@ -517,14 +579,25 @@ elif st.session_state.page == 3:
             index=locais_internos_opcoes.index(st.session_state.event_data.get('local_interno_especifico', locais_internos_opcoes[0])),
             key="local_interno_sel_pg3_new"
         )
-    else: 
+        # Limpar preferências de local externo se interno for escolhido
+        if 'local_externo_tipo_pref' in st.session_state.event_data:
+            st.session_state.event_data['local_externo_tipo_pref'] = None
+    else: # Externo
         st.session_state.event_data['local_externo_tipo_pref'] = st.selectbox(
             "Que tipo de local externo te agrada mais?",
             ["Restaurante/Bar com área reservada", "Salão de Festas", "Chácara/Sítio", "Espaço de Eventos Corporativos", "Outro tipo externo"],
-            index=0, key="local_externo_sel_pg3_new"
+            index=st.session_state.event_data.get('local_externo_tipo_pref_idx', 0), # Salvar/restaurar índice
+            key="local_externo_sel_pg3_new"
         )
+        # Salvar o índice para restaurar a seleção se o usuário voltar
+        st.session_state.event_data['local_externo_tipo_pref_idx'] = ["Restaurante/Bar com área reservada", "Salão de Festas", "Chácara/Sítio", "Espaço de Eventos Corporativos", "Outro tipo externo"].index(st.session_state.event_data['local_externo_tipo_pref'])
+        
         if "Restaurante" in st.session_state.event_data['local_externo_tipo_pref'] and st.session_state.event_data.get('festa_tematica_raw') == "Sim":
             st.info(f"Boa! O Agente de Localização vai tentar achar restaurantes que combinem com o tema '{st.session_state.event_data.get('ideia_tema', '(a ser sugerido)')}'!")
+        # Limpar local interno específico se externo for escolhido
+        if 'local_interno_especifico' in st.session_state.event_data:
+            st.session_state.event_data['local_interno_especifico'] = None
+
 
     col1, col2 = st.columns(2)
     with col1:
@@ -544,12 +617,14 @@ elif st.session_state.page == 4:
         precisa_transporte_escolha = st.radio(
             "Vamos precisar organizar um esquema de transporte para a galera chegar no local externo?",
             ("Sim, por favor!", "Não, cada um por si (e a sorte por todos!)"),
-            index=1 if not st.session_state.event_data.get('precisa_transporte', False) else 0,
+            index=1 if not st.session_state.event_data.get('precisa_transporte', False) else 0, # Default para Não
             key="radio_transporte_pg4"
         )
         st.session_state.event_data['precisa_transporte'] = (precisa_transporte_escolha == "Sim, por favor!")
-    else:
+    else: # Se o local for interno, não precisa de transporte
         st.session_state.event_data['precisa_transporte'] = False
+        st.info("Como o evento é interno, a questão do transporte para o local não se aplica aqui.")
+
 
     st.markdown("---")
     st.subheader("Tudo pronto para o Orquestrador e seus Agentes entrarem em ação?")
@@ -559,6 +634,10 @@ elif st.session_state.page == 4:
     with col2:
         if st.button("🥁 Gerar Plano Mestre da Festa! 🥁", type="primary", key="btn_gerar_plano_final"):
             st.session_state.page = 5
+            # Limpar caches específicos da página de resultados antes de regerar
+            st.session_state.sugestoes_nomes_cache = None
+            st.session_state.sugestoes_temas_cache = None
+            st.session_state.conceito_video_cache = None # Limpar cache do vídeo
             st.rerun()
 
 # --- Página 5: Resultados e Plano Mestre ---
@@ -585,11 +664,21 @@ elif st.session_state.page == 5:
 
     with st.expander("📋 Análise do Agente de Convidados e Dietas (e sugestões de rango!)", expanded=True):
         num_convidados_calc, resumo_detalhado_calc, resumo_prompt_calc, sugestoes_comida_calc = 0, "N/A", "", ""
+        # Garantir que 'arquivo_json_obj' seja passado corretamente
+        arquivo_json_para_agente = data.get('arquivo_json_obj') if data.get('fonte_convidados_raw') == "json" else GUEST_LIST_FILE
+
         if data.get('fonte_convidados_raw') == "json":
-            num_convidados_calc, resumo_detalhado_calc, resumo_prompt_calc, sugestoes_comida_calc = agente_convidados_dietas(True, data.get('arquivo_json_obj'))
+            # Verifica se o arquivo foi carregado, senão usa o mock como fallback
+            if data.get('arquivo_json_obj'):
+                num_convidados_calc, resumo_detalhado_calc, resumo_prompt_calc, sugestoes_comida_calc = agente_convidados_dietas(True, data.get('arquivo_json_obj'))
+            else:
+                st.warning(f"Arquivo JSON não foi carregado pelo utilizador. Usando o arquivo de exemplo '{GUEST_LIST_FILE}' para o Agente de Convidados e Dietas.")
+                num_convidados_calc, resumo_detalhado_calc, resumo_prompt_calc, sugestoes_comida_calc = agente_convidados_dietas(True, GUEST_LIST_FILE)
         elif data.get('fonte_convidados_raw') == "manual":
             num_convidados_calc = data.get('quantidade_pessoas_manual', 0)
+            # Para manual, não há arquivo JSON, então passamos False e None
             _, resumo_detalhado_calc, resumo_prompt_calc, sugestoes_comida_calc = agente_convidados_dietas(False, None)
+
 
         if num_convidados_calc is not None:
             num_convidados_final = num_convidados_calc
@@ -609,7 +698,7 @@ elif st.session_state.page == 5:
 
     # 3. Agente Batizador
     nome_final_evento = data.get('nome_evento_input', "Evento Surpresa") 
-    if data.get('ajuda_nome') and not data.get('nome_evento_input'):
+    if data.get('ajuda_nome') and not data.get('nome_evento_input'): # Se pediu ajuda E não digitou nome
         if st.session_state.sugestoes_nomes_cache is None: 
             with st.spinner("Agente Batizador quebrando a cabeça para os nomes..."):
                 objetivos_finais_lista_temp = data.get('objetivos_selecionados', []) + data.get('objetivos_personalizados', [])
@@ -619,6 +708,7 @@ elif st.session_state.page == 5:
         if st.session_state.sugestoes_nomes_cache and st.session_state.sugestoes_nomes_cache[0] != "Erro ao gerar nomes. Que tal 'Festa Surpresa do Chefe Que Não Sabe'?":
             opcoes_nomes = ["(Digitar meu próprio nome)"] + st.session_state.sugestoes_nomes_cache
             default_nome_index = 0
+            # Restaurar escolha anterior se existir
             nome_ja_escolhido_ou_digitado = st.session_state.event_data.get('nome_evento_escolhido') or st.session_state.event_data.get('nome_evento_digitado_final')
             if nome_ja_escolhido_ou_digitado:
                 if nome_ja_escolhido_ou_digitado in opcoes_nomes: default_nome_index = opcoes_nomes.index(nome_ja_escolhido_ou_digitado)
@@ -628,33 +718,33 @@ elif st.session_state.page == 5:
                 "O Agente Batizador sugere (escolha um ou digite o seu abaixo):",
                 options=opcoes_nomes, index=default_nome_index, key="select_nome_evento_final"
             )
-            st.session_state.event_data['nome_evento_escolhido_selectbox_raw'] = nome_escolhido_select
+            st.session_state.event_data['nome_evento_escolhido_selectbox_raw'] = nome_escolhido_select # Salva a escolha do selectbox
             if nome_escolhido_select == "(Digitar meu próprio nome)":
                 nome_final_evento = st.text_input("Então, qual vai ser o nome?", 
-                                                  value=st.session_state.event_data.get('nome_evento_digitado_final', nome_final_evento),
-                                                  key="input_nome_final_evento")
-                st.session_state.event_data['nome_evento_digitado_final'] = nome_final_evento
+                                                value=st.session_state.event_data.get('nome_evento_digitado_final', nome_final_evento), # Usa o valor já digitado se houver
+                                                key="input_nome_final_evento")
+                st.session_state.event_data['nome_evento_digitado_final'] = nome_final_evento # Salva o nome digitado
             else:
                 nome_final_evento = nome_escolhido_select
-                if 'nome_evento_digitado_final' in st.session_state.event_data:
+                if 'nome_evento_digitado_final' in st.session_state.event_data: # Limpa se uma sugestão foi escolhida
                     del st.session_state.event_data['nome_evento_digitado_final']
-        else:
+        else: # Falha do agente ou não há sugestões
             st.warning("O Agente Batizador falhou em sugerir nomes. Pode digitar um nome abaixo.")
             nome_final_evento = st.text_input("Qual o nome da festa, então?", value=nome_final_evento, key="input_nome_final_evento_falha")
             st.session_state.event_data['nome_evento_digitado_final'] = nome_final_evento
-    elif data.get('nome_evento_input'):
+    elif data.get('nome_evento_input'): # Usar o nome que o usuário digitou na primeira página
         nome_final_evento = data.get('nome_evento_input')
-    st.session_state.event_data['nome_evento_escolhido'] = nome_final_evento
+    st.session_state.event_data['nome_evento_escolhido'] = nome_final_evento # Este é o nome final para o resumo
 
     # 4. Agente de Sugestão de Temas
     tema_final_para_agentes = data.get('ideia_tema', "(Nenhum tema específico / Estilo Livre)") 
-    if data.get('festa_tematica_raw') == "Sim":
+    if data.get('festa_tematica_raw') == "Sim": # Se o usuário indicou que quer tema
         with st.expander("🎨 Sugestões de Tema do Agente Especializado (considerando dietas e sugestões de comida!)", expanded=True):
-            if st.session_state.sugestoes_temas_cache is None:
+            if st.session_state.sugestoes_temas_cache is None: # Gerar apenas se não houver cache
                 with st.spinner("Agente de Temas buscando inspiração..."):
                     st.session_state.sugestoes_temas_cache = agente_sugestao_tema_com_restricoes(
                         data.get('tipo_evento'),
-                        data.get('ideia_tema'), 
+                        data.get('ideia_tema'), # Ideia inicial do usuário
                         st.session_state.event_data.get('resumo_restricoes_para_prompt_final'),
                         st.session_state.event_data.get('sugestoes_comida_final') # Passa sugestões de comida
                     )
@@ -662,23 +752,27 @@ elif st.session_state.page == 5:
             if st.session_state.sugestoes_temas_cache:
                 opcoes_temas_nomes = []
                 ideia_original_formatada = f"Minha Ideia Original: {data.get('ideia_tema')}"
-                if data.get('ideia_tema'):
+                if data.get('ideia_tema'): # Adicionar ideia original do usuário se houver
                     opcoes_temas_nomes.append(ideia_original_formatada)
 
+                # Extrair nomes dos temas das sugestões completas
                 for sugestao_completa in st.session_state.sugestoes_temas_cache:
-                    nome_tema_extraido = sugestao_completa.split('\n')[0] 
-                    if "Nome:" in sugestao_completa:
+                    nome_tema_extraido = sugestao_completa.split('\n')[0] # Pega a primeira linha como nome
+                    if "Nome:" in sugestao_completa: # Tenta um parse mais específico
                         try: nome_tema_extraido = sugestao_completa.split("Nome:")[1].split("\n")[0].strip()
-                        except: pass 
+                        except: pass # Mantém o parse anterior se falhar
+                    # Adicionar apenas se não for duplicado da ideia original já formatada
                     if nome_tema_extraido not in opcoes_temas_nomes and (not data.get('ideia_tema') or nome_tema_extraido != data.get('ideia_tema')):
-                         opcoes_temas_nomes.append(nome_tema_extraido)
+                        opcoes_temas_nomes.append(nome_tema_extraido)
                 
-                opcoes_temas_nomes.append("(Digitar outro tema / Estilo Livre)")
-                opcoes_temas_finais_unicas = list(dict.fromkeys(opcoes_temas_nomes))
+                opcoes_temas_nomes.append("(Digitar outro tema / Estilo Livre)") # Opção para digitar
+                opcoes_temas_finais_unicas = list(dict.fromkeys(opcoes_temas_nomes)) # Garantir unicidade
 
                 default_tema_idx = 0
+                # Restaurar escolha anterior do tema
                 if data.get('tema_final_escolhido') in opcoes_temas_finais_unicas: default_tema_idx = opcoes_temas_finais_unicas.index(data.get('tema_final_escolhido'))
                 elif data.get('ideia_tema') and ideia_original_formatada in opcoes_temas_finais_unicas: default_tema_idx = opcoes_temas_finais_unicas.index(ideia_original_formatada)
+
 
                 tema_selecionado_selectbox = st.selectbox(
                     "Escolha o tema final para a festa (ou digite o seu):",
@@ -692,25 +786,26 @@ elif st.session_state.page == 5:
                     )
                     st.session_state.event_data['tema_digitado_final'] = tema_final_para_agentes
                 elif tema_selecionado_selectbox.startswith("Minha Ideia Original: "):
-                    tema_final_para_agentes = data.get('ideia_tema')
+                    tema_final_para_agentes = data.get('ideia_tema') # Usa a ideia original
                 else:
-                    tema_final_para_agentes = tema_selecionado_selectbox
+                    tema_final_para_agentes = tema_selecionado_selectbox # Usa a sugestão da IA
                 
                 st.session_state.event_data['tema_final_escolhido'] = tema_final_para_agentes if tema_final_para_agentes else "(Nenhum tema específico / Estilo Livre)"
 
+                # Mostrar detalhes das sugestões da IA
                 st.markdown("**Detalhes das Sugestões do Agente (se houver):**")
-                if st.session_state.sugestoes_temas_cache[0].startswith("Tema Sugerido:"): 
+                if st.session_state.sugestoes_temas_cache[0].startswith("Tema Sugerido:"): # Caso de erro do agente
                     st.write(st.session_state.sugestoes_temas_cache[0])
                 else:
                     for i, sugestao_completa in enumerate(st.session_state.sugestoes_temas_cache):
                         with st.container():
                             st.markdown(f"--- Sugestão IA {i+1} ---")
-                            st.markdown(sugestao_completa)
-            else:
+                            st.markdown(sugestao_completa) # Mostra a sugestão completa
+            else: # Se o agente não retornou nada
                 st.write("O Agente de Temas está tirando uma soneca criativa.")
                 st.session_state.event_data['tema_final_escolhido'] = data.get('ideia_tema', "(Nenhum tema específico / Estilo Livre)")
         st.markdown("---")
-    else:
+    else: # Se o usuário indicou que NÃO quer tema
         st.session_state.event_data['tema_final_escolhido'] = "(Nenhum tema específico / Estilo Livre)"
 
 
@@ -738,7 +833,7 @@ elif st.session_state.page == 5:
             data.get('valor_disponivel'),
             st.session_state.event_data.get('num_convidados_final_calculado'),
             st.session_state.event_data.get('tema_final_escolhido'),
-            st.session_state.event_data.get('contatos_locais_finais')
+            st.session_state.event_data.get('contatos_locais_finais') # Passa os contatos para simular custos
         )
         st.markdown(feedback_orcamento)
     st.markdown("---")
@@ -746,18 +841,20 @@ elif st.session_state.page == 5:
     # 7. Agente de Transporte
     if data.get('tipo_local_desejado') == "Externo" and data.get('precisa_transporte'):
         with st.expander("🚌 Ideias do Agente de Transporte", expanded=True):
-            local_str_para_transporte = "Local Externo Genérico"
-            if st.session_state.event_data.get('sugestoes_locais_finais') and isinstance(st.session_state.event_data['sugestoes_locais_finais'], list) and len(st.session_state.event_data['sugestoes_locais_finais']) > 0:
-                 local_str_para_transporte = st.session_state.event_data['sugestoes_locais_finais'][0]
+            local_str_para_transporte = "Local Externo Genérico" # Default
+            # Tenta usar o primeiro local sugerido para o prompt de transporte
+            if st.session_state.event_data.get('sugestoes_locais_finais') and \
+               isinstance(st.session_state.event_data['sugestoes_locais_finais'], list) and \
+               len(st.session_state.event_data['sugestoes_locais_finais']) > 0:
+                local_str_para_transporte = st.session_state.event_data['sugestoes_locais_finais'][0]
             
             feedback_transporte = agente_transporte(
                 st.session_state.event_data.get('num_convidados_final_calculado'),
-                local_str_para_transporte,
+                local_str_para_transporte, # Passa o nome do local (ou o primeiro sugerido)
                 data.get('precisa_transporte')
             )
             st.markdown(feedback_transporte)
         st.markdown("---")
-
 
     st.subheader("\n\n✨ Seu Plano Mestre Detalhado ✨")
     st.write(f"**Nome Final do Evento:** {st.session_state.event_data.get('nome_evento_escolhido', 'A definir pelo organizador')}")
@@ -769,16 +866,24 @@ elif st.session_state.page == 5:
     
     st.write(f"**Tema Escolhido:** {st.session_state.event_data.get('tema_final_escolhido', '(Nenhum tema específico / Estilo Livre)')}")
 
-    st.write(f"**Data Prevista:** {data.get('data_prevista').strftime('%d/%m/%Y') if data.get('data_prevista') else 'A definir'}")
+    data_prevista_obj = data.get('data_prevista')
+    if isinstance(data_prevista_obj, datetime.date):
+        st.write(f"**Data Prevista:** {data_prevista_obj.strftime('%d/%m/%Y')}")
+    else:
+        st.write(f"**Data Prevista:** {data_prevista_obj if data_prevista_obj else 'A definir'}") # Caso seja string ou None
     
     local_final_str = "A definir"
     if data.get('tipo_local_desejado') == "Interno na Empresa":
         local_final_str = data.get('local_interno_especifico', "Espaço interno não especificado")
     elif st.session_state.event_data.get('sugestoes_locais_finais'):
+        # Formata as sugestões de local para exibição
         locais_formatados = []
         for item_local in st.session_state.event_data['sugestoes_locais_finais']:
-            locais_formatados.append(f"  - {item_local}")
-        local_final_str = "\n".join(locais_formatados)
+            # Remove a parte do contato simulado para uma exibição mais limpa no resumo
+            item_sem_contato = item_local.split(" - Contato Simulado:")[0].split(" - Contato:")[0]
+            locais_formatados.append(f"  - {item_sem_contato.strip()}")
+        local_final_str = "\n".join(locais_formatados) if locais_formatados else "Nenhuma sugestão específica."
+
 
     st.markdown(f"**Local Previsto/Sugerido:**\n{local_final_str}")
 
@@ -791,15 +896,24 @@ elif st.session_state.page == 5:
     st.success("Voilà! Este é o seu rascunho inicial turbinado. Agora é só alegria... e um pouquinho mais de trabalho!")
 
     if st.button("Planejar Outra Festa Épica? 🚀", key="btn_planejar_outra_final"):
+        # Limpar todos os dados do evento e caches para um novo planejamento
         st.session_state.page = 1
         st.session_state.event_data = { 
             'objetivos_selecionados': [], 'objetivos_personalizados': [],
             'nome_evento_escolhido': None, 'tema_final_escolhido': None
+            # Outros campos relevantes podem ser resetados aqui se necessário
         }
         st.session_state.objetivo_custom_temp_input = ""
         st.session_state.sugestoes_nomes_cache = None
         st.session_state.sugestoes_temas_cache = None 
-        if 'arquivo_json_obj' in st.session_state: 
+        st.session_state.conceito_video_cache = None # Limpar cache do vídeo
+        
+        # Resetar o uploader de arquivo
+        if 'arquivo_json_obj' in st.session_state.event_data: 
+            del st.session_state.event_data['arquivo_json_obj'] # Remove o objeto do arquivo
+        if 'arquivo_json_obj' in st.session_state: # Para o caso de estar diretamente no session_state
              del st.session_state['arquivo_json_obj']
-        st.session_state.uploader_key_count = st.session_state.get('uploader_key_count', 0) + 1 
+
+        st.session_state.uploader_key_count = st.session_state.get('uploader_key_count', 0) + 1 # Incrementar para forçar o reset do file_uploader
+        
         st.rerun()
