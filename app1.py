@@ -103,7 +103,7 @@ def agente_batizador_eventos(tipo_evento, objetivo_evento_str):
         return ["Erro ao gerar nomes. Que tal 'Festa Surpresa do Chefe Que Não Sabe'?"]
 
 def agente_sugestao_tema_com_restricoes(tipo_evento, ideia_tema_inicial, resumo_restricoes_str, sugestoes_comida_str=None):
-    model_id = 'gemini-1.5-pro-latest' # Usar um modelo mais robusto para tarefas complexas
+    model_id = 'gemini-1.5-flash-latest' # Usar um modelo mais robusto para tarefas complexas
     st.write("🎨 **Agente de Sugestão de Temas (com olhar clínico para dietas e cardápios) em ação!**")
     try:
         model = get_gemini_model(model_id)
@@ -147,7 +147,7 @@ def agente_sugestao_tema_com_restricoes(tipo_evento, ideia_tema_inicial, resumo_
         return ["Tema Sugerido: 'A Festa do Improviso' (porque deu ruim aqui)."]
 
 def agente_localizacao(tipo_evento, tema_final_escolhido, tipo_local_desejado, resumo_restricoes_str=None, sugestoes_comida_str=None, local_interno_especifico=None):
-    model_id = 'gemini-2.5-pro-preview-tts' # Usar um modelo mais robusto
+    model_id = 'gemini-1.5-flash-latest' # Usar um modelo mais robusto
     st.write("🗺️ **Agente de Localização com o mapa na mão:** Procurando o esconderijo perfeito, considerando tema, dietas e tipos de comida!")
     sugestoes = []
     contatos_simulados = {}
@@ -334,7 +334,7 @@ def agente_orcamentista(valor_disponivel, num_pessoas, tema_final_escolhido=None
     return final_feedback
 
 def agente_transporte(num_pessoas, local_evento_str, precisa_transporte_flag):
-    model_id = 'gemini-2.5-pro-preview-tts' # Usar um modelo mais robusto
+    model_id = 'gemini-1.5-flash-latest' # Usar um modelo mais robusto
     st.write("🚌 **Agente de Transporte engatando a primeira:** Levando a galera pro rolê!")
     if not precisa_transporte_flag:
         return "Transporte por conta da galera? Menos uma preocupação (ou mais uma, dependendo do trânsito!)."
