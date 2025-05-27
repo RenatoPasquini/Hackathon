@@ -183,7 +183,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/", methods=["POST"])
+@app.route("/api/compile_responses", methods=["POST"])
 def compile_responses_route():
     """
     Endpoint da API para receber detalhes do evento e devolver respostas compiladas de várias APIs.
@@ -223,7 +223,7 @@ def compile_responses_route():
         Playlist Spotify: {spotify_response}
         Local da Festa: {party_place_response}
 
-        Com base nestas sugestões, crie uma resposta final em formato Markdown.
+        Com base nestas sugestões, crie uma resposta final em formato Markdown e com Emojis para ser mais dinamico.
         """
 
         try:

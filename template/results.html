@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Suggestions</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Event Suggestions</h1>
+        </header>
+        <main>
+            <section id="resultsSection">
+                <h2>Sugestões de Temas Geradas pela IA:</h2>
+                <div id="themeSuggestionsOutput" class="results-output">
+                    <!-- Results will be displayed here -->
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>POC - Organizador de Eventos com IA & Gemini</p>
+        </footer>
+    </div>
+    <script>
+        // JavaScript to populate the results
+        document.addEventListener('DOMContentLoaded', function() {
+            const results = localStorage.getItem('eventSuggestions');
+            if (results) {
+                const themeSuggestionsOutput = document.getElementById('themeSuggestionsOutput');
+                themeSuggestionsOutput.innerHTML = marked.parse(results);
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>

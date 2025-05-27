@@ -18,6 +18,7 @@
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Roboto+Mono&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
 
   <body>
@@ -99,13 +100,12 @@
 
           <div class="form-actions">
             <button type="submit" id="submitButton">
-              Obter Sugestões de Temas
+              Planear o Meu Evento
             </button>
           </div>
         </form>
-
         <section id="resultsSection">
-          <h2>Sugestões de Temas Geradas pela IA:</h2>
+          <h2>Dados do Evento Geradas por IA:</h2>
 
           <div id="loadingIndicator">
             <p>A Planear TUDO por Si ...</p>
@@ -116,7 +116,12 @@
           <pre id="themeSuggestionsOutput" class="results-output"></pre>
         </section>
       </main>
-
+      <div id="loadingScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; z-index: 1000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 2rem;">
+          A Planear Tudo por Si...
+          <div class="spinner"></div>
+        </div>
+      </div>
       <footer>
         <p>POC - Organizador de Eventos com IA & Gemini</p>
       </footer>
